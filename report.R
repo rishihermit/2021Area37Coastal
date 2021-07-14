@@ -18,7 +18,7 @@ mkdir("report")
 stocks <- readRDS("output/results.rds")
 
 ## Plot data and priors, posteriors, and CPUE
-plot_driors(stocks$driors[[1]]) # stock 1 is Sardinella aurita
+plot_driors(stocks$driors[[1]])
 ggsave("report/driors_1.png")
 plot_prior_posterior(stocks$sraplus_fit[[1]], stocks$driors[[1]])
 ggsave("report/posterior_1.png")

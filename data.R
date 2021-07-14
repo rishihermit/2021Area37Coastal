@@ -111,5 +111,5 @@ stocks <- stocks %>%
 saveRDS(stocks, "data/input.rds")
 
 ## Plot driors for one stock
-plot_driors(stocks$driors[[2]])  # stock 2 is Sardinella aurita
+plot_driors(stocks$driors[[2]])
 ggsave("data/driors_2.png")
