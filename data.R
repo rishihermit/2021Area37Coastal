@@ -1,7 +1,6 @@
 ## Preprocess data, write TAF data tables
 
-## Before: Area37cuyrrentsofia.csv,
-##         EffortindexRousseaAugNominal.csv (bootstrap/data)
+## Before: catch.csv, effort.csv (bootstrap/data)
 ## After:  catch_by_stock.png, catch_relative.png, catch_total.png,
 ##         driors_2.png, input.rds (data)
 ## Test again for R
@@ -19,7 +18,7 @@ library(tidyr)   # nest, pivot_longer
 mkdir("data")
 
 ## Read catch data, convert to tibble (long format)
-catch <- read.csv("bootstrap/data/CoastalArea37.csv")
+catch <- read.csv("bootstrap/data/catch.csv")
 catch <- catch %>%
   pivot_longer(-c(Year, Total), names_to="stock", values_to="capture") %>%
   filter(!is.na(Year)) %>%
@@ -69,7 +68,7 @@ catch <- catch %>%
   filter(!is.na(taxa))
 
 ## Read effort data, add 'effort' column
-effort <- read.csv("bootstrap/data/EffortindexRousseaAugNominal.csv")
+effort <- read.csv("bootstrap/data/effort.csv")
 index <- effort$E1
 catch_effort <- catch %>%
   left_join(effort, by=c("year"="Year"))
@@ -112,5 +111,5 @@ stocks <- stocks %>%
 saveRDS(stocks, "data/input.rds")
 
 ## Plot driors for one stock
-plot_driors(stocks$driors[[2]])  # stock 2 is Sardinella aurita
+plot_driors(stocks$driors[[2]])
 ggsave("data/driors_2.png")
