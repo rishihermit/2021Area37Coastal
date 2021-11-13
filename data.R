@@ -66,7 +66,6 @@ catch <- catch %>%
 
 ## Read effort data, combine catch and effort data
 effort <- read.taf("bootstrap/data/effort.csv")
-index <- effort$E1
 catch_effort <- catch %>%
   left_join(effort, by=c("year"="Year"))
 
