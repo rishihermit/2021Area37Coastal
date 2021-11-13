@@ -3,8 +3,6 @@
 ## Before: catch.csv, effort.csv (bootstrap/data)
 ## After:  catch_by_stock.png, catch_relative.png, catch_total.png,
 ##         driors_2.png, input.rds (data)
-## Test again for R
-## Test 2
 
 library(TAF)
 library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
@@ -18,7 +16,7 @@ library(tidyr)   # nest, pivot_longer
 mkdir("data")
 
 ## Read catch data, convert to tibble (long format)
-catch <- read.csv("bootstrap/data/catch.csv")
+catch <- read.taf("bootstrap/data/catch.csv")
 catch <- catch %>%
   pivot_longer(-c(Year, Total), names_to="stock", values_to="capture") %>%
   filter(!is.na(Year)) %>%
@@ -58,17 +56,16 @@ catch %>%
   geom_point()
 ggsave("data/catch_relative.png")
 
-## Add columns 'stock_number_thing' and 'taxa'
+## Add column 'taxa'
 catch <- catch %>%
   ungroup() %>%
-  mutate(stock_number_thing=str_extract_all(stock, "\\d")) %>%
   mutate(taxa = str_replace_all(stock, "\\d", "")) %>%
   mutate(taxa = str_replace_all(taxa, "\\.", " ") %>% str_trim()) %>%
   mutate(taxa = str_replace_all(taxa, "  ", " ") %>% str_trim()) %>%
   filter(!is.na(taxa))
 
-## Read effort data, add 'effort' column
-effort <- read.csv("bootstrap/data/effort.csv")
+## Read effort data, combine catch and effort data
+effort <- read.taf("bootstrap/data/effort.csv")
 index <- effort$E1
 catch_effort <- catch %>%
   left_join(effort, by=c("year"="Year"))
@@ -80,7 +77,7 @@ stocks <- catch_effort %>%
   ungroup()
 
 ## Read Priors data
-priors<-read.csv("bootstrap/data/priors.csv")
+priors <- read.taf("bootstrap/data/priors.csv")
 
 ## Add nested 'driors' column (data and priors)
 stocks <- stocks %>%
@@ -90,12 +87,17 @@ stocks <- stocks %>%
       data,
       ~
         format_driors(
-          taxa = .x,shape_prior=2,  # use_heuristics=TRUE, shape_prior=2,
+          taxa = .x,
+          shape_prior = 2,  # use_heuristics=TRUE, shape_prior=2,
           catch = .y$capture,
           years = .y$year,
-          initial_state = priors$initial_state, initial_state_cv=priors$initial_state_cv, b_ref_type = "k",
-          terminal_state = priors$terminal_state, terminal_state_cv = priors$terminal_state_cv,# Prior basis from MArcelos squid cuttlefish analysis in Med
-          effort = .y$E1[!is.na(.y$E1)], effort_years=.y$year[!is.na(.y$E1)],
+          initial_state = priors$initial_state,
+          initial_state_cv=priors$initial_state_cv,
+          b_ref_type = "k",
+          terminal_state = priors$terminal_state,
+          terminal_state_cv = priors$terminal_state_cv,
+          effort = .y$E1[!is.na(.y$E1)],
+          effort_years=.y$year[!is.na(.y$E1)],
           growth_rate_prior = NA,
           growth_rate_prior_cv = 0.2)
       ## initial_state = 0.5,initial_state_cv = 0.25,b_ref_type = "k",
