@@ -1,8 +1,8 @@
 ## Preprocess data, write TAF data tables
 
 ## Before: catch.csv, effort.csv (bootstrap/data)
-## After:  catch_by_stock.png, catch_relative.png, catch_total.png,
-##         driors_2.png, input.rds (data)
+## After:  catch_effort.csv, catch_by_stock.png, catch_relative.png,
+##         catch_total.png, driors_2.png, input.rds (data)
 
 library(TAF)
 library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
@@ -115,3 +115,6 @@ saveRDS(stocks, "data/input.rds")
 ## Plot driors for one stock
 plot_driors(stocks$driors[[2]])
 ggsave("data/driors_2.png")
+
+## Export catch and effort data
+write.taf(catch_effort, dir="data")
