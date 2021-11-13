@@ -1,6 +1,7 @@
 ## Prepare plots and tables for report
 
-## Before: current_status.csv, results.rds, stock_timeseries.csv (output)
+## Before: results.rds (model), current_status.csv,
+##         stock_timeseries.csv (output)
 ## After:  bbmsy.png, cpue_1.png, driors_1.png, posterior_1.png,
 ##         status_by_year.png, status_sofia.png, status_sraplus.png,
 ##         stock_posterior.pdf, stock_timeseries.pdf (report)
@@ -15,7 +16,7 @@ source("utilities.R") # plotProp
 
 mkdir("report")
 
-stocks <- readRDS("output/results.rds")
+stocks <- readRDS("model/results.rds")
 
 ## Plot data and priors, posteriors, and CPUE
 plot_driors(stocks$driors[[1]])
