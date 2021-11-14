@@ -87,16 +87,16 @@ stocks <- stocks %>%
       ~
         format_driors(
           taxa = .x,
-          shape_prior = 2,  # use_heuristics=TRUE, shape_prior=2,
+          shape_prior = 2,  # use_heuristics=TRUE, shape_prior=2
           catch = .y$capture,
           years = .y$year,
           initial_state = priors$initial_state,
-          initial_state_cv=priors$initial_state_cv,
+          initial_state_cv = priors$initial_state_cv,
           b_ref_type = "k",
           terminal_state = priors$terminal_state,
           terminal_state_cv = priors$terminal_state_cv,
-          effort = .y$E1[!is.na(.y$E1)],
-          effort_years=.y$year[!is.na(.y$E1)],
+          effort = .y$All[!is.na(.y$All)],
+          effort_years = .y$year[!is.na(.y$All)],
           growth_rate_prior = NA,
           growth_rate_prior_cv = 0.2)
       ## initial_state = 0.5,initial_state_cv = 0.25,b_ref_type = "k",
