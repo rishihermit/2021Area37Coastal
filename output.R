@@ -1,7 +1,7 @@
 ## Extract results of interest, write TAF output tables
 
 ## Before: results.rds (model)
-## After:  stock_tables/*.csv, all_effort.txt, current_status.csv, results.rds,
+## After:  stock_tables/*.csv, all_effort.txt, current_status.csv,
 ##         stock_timeseries.csv (output)
 
 library(TAF)
@@ -10,9 +10,8 @@ library(tidyr)   # pivot_wider, unnest
 
 mkdir("output")
 
-## Read model results and make available in 'output' folder
+## Read model results
 stocks <- readRDS("model/results.rds")
-cp("model/results.rds", "output")
 
 ## Categorize stock status by comparing B/Bmsy to 0.8 and 1.2
 current_status <- stocks %>%
