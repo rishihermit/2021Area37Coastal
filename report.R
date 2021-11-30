@@ -44,7 +44,7 @@ dev.off()
 ## Plot posteriors and time series for each stock
 stocks <- stocks %>%
   mutate(plot_prior_posterior_plot=
-           map2(sraplus_fit,driors,plot_prior_posterior))
+           map2(sraplus_fit, driors, plot_prior_posterior))
 savefoo <- function(stock, plot) print(plot + labs(title=stock))
 pdf("report/stock_posterior.pdf")
 walk2(stocks$stock, stocks$plot_prior_posterior_plot, savefoo)
@@ -66,7 +66,7 @@ dev.off()
 
 ## Overlay B/Bmsy time series of all stocks in a single plot
 ggplot(newResTab, aes(x=yr, y=bbmsy, colour=Stock, group=Stock)) +
-  geom_line(show.legend = TRUE) +
-  geom_hline(yintercept=0.8, linetype="dashed", color = "red", size=2) +
-  geom_hline(yintercept=1.2, linetype="dashed", color = "green", size=2)
+  geom_line(show.legend=TRUE) +
+  geom_hline(yintercept=0.8, linetype="dashed", color="red", size=2) +
+  geom_hline(yintercept=1.2, linetype="dashed", color="green", size=2)
 ggsave("report/bbmsy.png")
