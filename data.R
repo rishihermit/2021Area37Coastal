@@ -10,7 +10,6 @@ library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
 library(ggplot2)
 library(purrr)   # map2
 library(sraplus) # format_driors, plot_driors
-library(stringr) # str_extract_all, str_replace_all, str_trim
 library(tidyr)   # nest, pivot_longer
 
 mkdir("data")
@@ -57,12 +56,7 @@ catch %>%
 ggsave("data/catch_relative.png")
 
 ## Add column 'taxa'
-catch <- catch %>%
-  ungroup() %>%
-  mutate(taxa = str_replace_all(stock, "\\d", "")) %>%
-  mutate(taxa = str_replace_all(taxa, "\\.", " ") %>% str_trim()) %>%
-  mutate(taxa = str_replace_all(taxa, "  ", " ") %>% str_trim()) %>%
-  filter(!is.na(taxa))
+catch$taxa <- catch$stock
 
 ## Read effort data, combine catch and effort data
 effort <- read.taf("bootstrap/data/effort.csv")
