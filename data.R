@@ -15,6 +15,8 @@ library(tidyr)   # nest, pivot_longer
 
 mkdir("data")
 
+stocks.combined <- TRUE
+
 ## Read catch data, convert to tibble (long format)
 catch <- read.taf("bootstrap/data/catch.csv")
 catch <- catch %>%
