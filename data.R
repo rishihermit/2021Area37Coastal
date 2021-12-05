@@ -18,9 +18,7 @@ stocks.combined <- TRUE
 
 ## Read catch data, convert to tibble (long format)
 catch <- read.taf("bootstrap/data/catch.csv")
-catch <- catch %>%
-  pivot_longer(-c(Year, Total), names_to="stock", values_to="capture") %>%
-  filter(!is.na(Year))
+catch <- pivot_longer(catch, -Year, "stock", values_to="capture")
 names(catch)[names(catch)=="Year"] <- "year"
 
 ## Plot catches
