@@ -7,7 +7,6 @@
 library(TAF)
 library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
 library(ggplot2)
-library(janitor) # clean_names
 library(purrr)   # map2
 library(sraplus) # format_driors, plot_driors
 library(stringr) # str_extract_all, str_replace_all, str_trim
@@ -21,8 +20,8 @@ stocks.combined <- TRUE
 catch <- read.taf("bootstrap/data/catch.csv")
 catch <- catch %>%
   pivot_longer(-c(Year, Total), names_to="stock", values_to="capture") %>%
-  filter(!is.na(Year)) %>%
-  clean_names()
+  filter(!is.na(Year))
+names(catch)[names(catch)=="Year"] <- "year"
 
 ## Plot catches
 catch %>%
