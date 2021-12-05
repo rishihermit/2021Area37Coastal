@@ -5,6 +5,7 @@
 ##         catch_total.png, driors_2.png, input.rds (data)
 
 library(TAF)
+library(TSAF)
 library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
 library(ggplot2)
 library(purrr)   # map2
@@ -17,7 +18,7 @@ mkdir("data")
 stocks.combined <- TRUE
 
 ## Read catch data, convert to tibble (long format)
-catch <- read.taf("bootstrap/data/catch.csv")
+catch <- readCatch(stocks.combined=stocks.combined)
 catch <- pivot_longer(catch, -Year, "stock", values_to="capture")
 names(catch)[names(catch)=="Year"] <- "year"
 
