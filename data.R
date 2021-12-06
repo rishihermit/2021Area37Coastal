@@ -59,11 +59,11 @@ ggsave("data/catch_relative.png")
 ## Add column 'taxa'
 catch$taxa <- catch$stock
 
-## Read effort data, merge catch and effort data
+## Read effort data, add column to catch data
 effort <- read.taf("bootstrap/data/effort.csv")
 effort <- pivot_longer(effort, -Year, "stock", values_to="effort")
 names(effort) <- tolower(names(effort))
-catch_effort <- mergeCatchEffort(catch, effort, stocks.combined)
+catch_effort <- addEffort(catch, effort, stocks.combined)
 
 ## Create nested tibble with 'data' column (catch and effort)
 stocks <- catch_effort %>%
