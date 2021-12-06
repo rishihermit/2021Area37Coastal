@@ -61,7 +61,6 @@ catch$taxa <- catch$stock
 
 ## Read effort data, merge catch and effort data
 effort <- read.taf("bootstrap/data/effort.csv")
-effort <- read.taf("../coastal_newest/bootstrap/data/effort.csv")
 effort <- pivot_longer(effort, -Year, "stock", values_to="effort")
 names(effort) <- tolower(names(effort))
 catch_effort <- mergeCatchEffort(catch, effort, stocks.combined)
