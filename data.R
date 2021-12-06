@@ -5,6 +5,7 @@
 ##         catch_total.png, driors_2.png, input.rds (data)
 
 library(TAF)
+library(TSAF)
 library(dplyr)   # filter, group_by, left_join, mutate, summarise, ungroup
 library(ggplot2)
 library(purrr)   # map2
@@ -19,7 +20,7 @@ stocks.combined <- TRUE
 catch <- read.taf("bootstrap/data/catch.csv")
 catch$Total <- NULL  # not used, not a stock
 catch <- pivot_longer(catch, -Year, "stock", values_to="capture")
-names(catch)[names(catch)=="Year"] <- "year"
+names(catch) <- tolower(names(catch))
 
 ## Plot catches
 catch %>%
@@ -58,10 +59,12 @@ ggsave("data/catch_relative.png")
 ## Add column 'taxa'
 catch$taxa <- catch$stock
 
-## Read effort data, combine catch and effort data
+## Read effort data, merge catch and effort data
 effort <- read.taf("bootstrap/data/effort.csv")
-catch_effort <- catch %>%
-  left_join(effort, by=c("year"="Year"))
+effort <- read.taf("../coastal_newest/bootstrap/data/effort.csv")
+effort <- pivot_longer(effort, -Year, "stock", values_to="effort")
+names(effort) <- tolower(names(effort))
+catch_effort <- mergeCatchEffort(catch, effort, stocks.combined)
 
 ## Create nested tibble with 'data' column (catch and effort)
 stocks <- catch_effort %>%
