@@ -71,45 +71,14 @@ stocks <- catch_effort %>%
   nest() %>%
   ungroup()
 
-## Read Priors data
+## Read priors data, add as driors to stocks object
 priors <- read.taf("bootstrap/data/priors.csv")
-
-## Add nested 'driors' column (data and priors)
-stocks <- stocks %>%
-  mutate(
-    driors=map2(
-      taxa,
-      data,
-      ~
-        format_driors(
-          taxa = .x,
-          shape_prior = 2,  # use_heuristics=TRUE, shape_prior=2
-          catch = .y$capture,
-          years = .y$year,
-          initial_state = priors$initial_state,
-          initial_state_cv = priors$initial_state_cv,
-          b_ref_type = "k",
-          terminal_state = priors$terminal_state,
-          terminal_state_cv = priors$terminal_state_cv,
-          effort = .y$All[!is.na(.y$All)],
-          effort_years = .y$year[!is.na(.y$All)],
-          growth_rate_prior = NA,
-          growth_rate_prior_cv = 0.2)
-      ## initial_state = 0.5,initial_state_cv = 0.25,b_ref_type = "k",
-      ## final_u = 1.2,final_u_cv = 0.25, f_ref_type = "fmsy"
-      ## sar = 4,
-      ## fmi = c(
-      ##   "research" = .5,
-      ##   "management" = .5,
-      ##   "enforcement" = .35,
-      ##   "socioeconomics" = 0.7
-      ## )
-    ))
-saveRDS(stocks, "data/input.rds")
+stocks <- addDriors(stocks, priors, stocks.combined)
 
 ## Plot driors for one stock
 plot_driors(stocks$driors[[2]])
 ggsave("data/driors_2.png")
 
-## Export catch and effort data
+## Export stocks and catch_effort
+saveRDS(stocks, "data/input.rds")
 write.taf(catch_effort, dir="data")
