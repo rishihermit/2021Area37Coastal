@@ -19,7 +19,7 @@ stocks.combined <- TRUE
 ## Read catch data, convert to tibble (long format)
 catch <- read.taf("bootstrap/data/catch.csv")
 catch$Total <- NULL  # not used, not a stock
-catch <- pivot_longer(catch, -Year, "stock", values_to="capture")
+catch <- pivot_longer(catch, !Year, "stock", values_to="capture")
 names(catch) <- tolower(names(catch))
 
 ## Plot catches
@@ -61,7 +61,7 @@ catch$taxa <- catch$stock
 
 ## Read effort data, add column to catch data
 effort <- read.taf("bootstrap/data/effort.csv")
-effort <- pivot_longer(effort, -Year, "stock", values_to="effort")
+effort <- pivot_longer(effort, !Year, "stock", values_to="effort")
 names(effort) <- tolower(names(effort))
 catch_effort <- addEffort(catch, effort, stocks.combined)
 
