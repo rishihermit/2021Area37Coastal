@@ -14,8 +14,6 @@ library(tidyr)   # nest, pivot_longer
 
 mkdir("data")
 
-stocks.combined <- TRUE
-
 ## Read catch data, convert to tibble (long format)
 catch <- read.taf("bootstrap/data/catch.csv")
 catch$Total <- NULL  # not used, not a stock
@@ -63,7 +61,7 @@ catch$taxa <- catch$stock
 effort <- read.taf("bootstrap/data/effort.csv")
 effort <- pivot_longer(effort, !Year, "stock", values_to="effort")
 names(effort) <- tolower(names(effort))
-catch_effort <- addEffort(catch, effort, stocks.combined)
+catch_effort <- addEffort(catch, effort, stocks.combined=TRUE)
 
 ## Create nested tibble with 'data' column (catch and effort)
 stocks <- catch_effort %>%
@@ -73,7 +71,7 @@ stocks <- catch_effort %>%
 
 ## Read priors data, add as driors to stocks object
 priors <- read.taf("bootstrap/data/priors.csv")
-stocks <- addDriors(stocks, priors, stocks.combined)
+stocks <- addDriors(stocks, priors, stocks.combined, stocks.combined=TRUE)
 
 ## Plot driors for one stock
 plot_driors(stocks$driors[[2]])
