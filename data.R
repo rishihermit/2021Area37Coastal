@@ -71,7 +71,7 @@ stocks <- catch_effort %>%
 
 ## Read priors data, add as driors to stocks object
 priors <- read.taf("bootstrap/data/priors.csv")
-stocks <- addDriors(stocks, priors, stocks.combined, stocks.combined=TRUE)
+stocks <- addDriors(stocks, priors, stocks.combined=TRUE)
 
 ## Plot driors for one stock
 plot_driors(stocks$driors[[2]])
